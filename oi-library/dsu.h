@@ -4,7 +4,7 @@ private:
     int n;
     std::vector<int>fa, siz;
 public:
-    dsu(int _n) {
+    dsu(const int &_n) {
         n = _n;
         fa.resize(n);
         siz.resize(n);

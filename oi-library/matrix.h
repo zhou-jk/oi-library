@@ -2,8 +2,11 @@
 #include <vector>
 #include "modint.h"
 struct matrix {
+private:
+    int n, m;
+    std::vector<std::vector<modint>>mat;
 public:
-    matrix(int _n = 0, int _m = 0) {
+    matrix(const int &_n = 0, const int &_m = 0) {
         n = _n, m = _m;
         mat.resize(n);
 
@@ -12,7 +15,7 @@ public:
 
         return;
     }
-    void resize(int _n = 0, int _m = 0) {
+    void resize(const int &_n = 0, const int &_m = 0) {
         n = _n, m = _m;
         mat.resize(n);
 
@@ -110,7 +113,4 @@ public:
     std::vector<modint> &operator [](const int &i) {
         return mat[i];
     }
-private:
-    int n, m;
-    std::vector<std::vector<modint>>mat;
 };
