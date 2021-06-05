@@ -54,12 +54,12 @@ void init(int _n) {
     init_inv(n * 4);
     return;
 }
-typedef std::vector<int> Poly;
-Poly operator+(const Poly &a, const Poly &b) {
-    Poly f = a, g = b;
+typedef std::vector<int> poly;
+poly operator+(const poly &a, const poly &b) {
+    poly f = a, g = b;
     int n = std::max(a.size(), b.size());
     f.resize(n), g.resize(n);
-    Poly c(n);
+    poly c(n);
 
     for (int i = 0; i < n; i++) {
         c[i] = f[i] + g[i];
@@ -70,11 +70,11 @@ Poly operator+(const Poly &a, const Poly &b) {
 
     return c;
 }
-Poly operator-(const Poly &a, const Poly &b) {
-    Poly f = a, g = b;
+poly operator-(const poly &a, const poly &b) {
+    poly f = a, g = b;
     int n = std::max(a.size(), b.size());
     f.resize(n), g.resize(n);
-    Poly c(n);
+    poly c(n);
 
     for (int i = 0; i < n; i++) {
         c[i] = f[i] - g[i];
@@ -85,8 +85,8 @@ Poly operator-(const Poly &a, const Poly &b) {
 
     return c;
 }
-Poly operator+(const Poly &F, const int &x) {
-    Poly f = F;
+poly operator+(const poly &F, const int &x) {
+    poly f = F;
     f[0] += x;
 
     if (f[0] >= MOD)
@@ -94,8 +94,8 @@ Poly operator+(const Poly &F, const int &x) {
 
     return f;
 }
-Poly operator+(const int &x, const Poly &F) {
-    Poly f = F;
+poly operator+(const int &x, const poly &F) {
+    poly f = F;
     f[0] += x;
 
     if (f[0] >= MOD)
@@ -103,8 +103,8 @@ Poly operator+(const int &x, const Poly &F) {
 
     return f;
 }
-Poly operator-(const Poly &F, const int &x) {
-    Poly f = F;
+poly operator-(const poly &F, const int &x) {
+    poly f = F;
     f[0] -= x;
 
     if (f[0] < 0)
@@ -112,8 +112,8 @@ Poly operator-(const Poly &F, const int &x) {
 
     return f;
 }
-Poly operator-(const int &x, const Poly &F) {
-    Poly f = F;
+poly operator-(const int &x, const poly &F) {
+    poly f = F;
     int n = f.size() - 1;
 
     for (int i = 0; i <= n; i++)
@@ -126,8 +126,8 @@ Poly operator-(const int &x, const Poly &F) {
 
     return f;
 }
-Poly ntt(const Poly &F, const Poly &G, const std::function<int(int, int)> &mul) {
-    Poly f = F, g = G;
+poly ntt(const poly &F, const poly &G, const std::function<int(int, int)> &mul) {
+    poly f = F, g = G;
     int n = f.size() - 1, m = g.size() - 1;
     m += n, n = 1;
 
@@ -146,7 +146,7 @@ Poly ntt(const Poly &F, const Poly &G, const std::function<int(int, int)> &mul) 
     }
 
     static const int BIT = 15;
-    std::function<void(Poly &)> dft = [ = ](Poly & F) {
+    std::function<void(poly &)> dft = [ = ](poly & F) {
         int n = F.size();
         std::vector<unsigned long long>f(n);
 
@@ -179,7 +179,7 @@ Poly ntt(const Poly &F, const Poly &G, const std::function<int(int, int)> &mul) 
     for (int i = 0; i < n; i++)
         f[i] = mul(f[i], g[i]);
 
-    std::function<void(Poly &)> idft = [ = ](Poly & F) {
+    std::function<void(poly &)> idft = [ = ](poly & F) {
         int n = F.size();
         std::vector<unsigned long long>f(n);
 
@@ -215,13 +215,13 @@ Poly ntt(const Poly &F, const Poly &G, const std::function<int(int, int)> &mul) 
     f.resize(m + 1);
     return f;
 }
-Poly operator*(const Poly &F, const Poly &G) {
+poly operator*(const poly &F, const poly &G) {
     return ntt(F, G, [ = ](const int &x, const int &y) {
         return 1LL * x * y % MOD;
     });
 }
-Poly operator*(const Poly &F, const int &x) {
-    Poly f = F;
+poly operator*(const poly &F, const int &x) {
+    poly f = F;
     int n = f.size() - 1;
 
     for (int i = 0; i <= n; i++)
@@ -229,8 +229,8 @@ Poly operator*(const Poly &F, const int &x) {
 
     return f;
 }
-Poly operator*(const int &x, const Poly &F) {
-    Poly f = F;
+poly operator*(const int &x, const poly &F) {
+    poly f = F;
     int n = f.size() - 1;
 
     for (int i = 0; i <= n; i++)
@@ -238,8 +238,8 @@ Poly operator*(const int &x, const Poly &F) {
 
     return f;
 }
-Poly getinv(const Poly &F) {
-    Poly f = F;
+poly getinv(const poly &F) {
+    poly f = F;
     int m = f.size() - 1;
     int n = 1;
 
@@ -247,10 +247,10 @@ Poly getinv(const Poly &F) {
         n <<= 1;
 
     f.resize(n);
-    Poly g = {getinv(f[0])};
+    poly g = {getinv(f[0])};
 
     for (int m = 2; m <= n; m <<= 1) {
-        Poly t(f.begin(), f.begin() + m);
+        poly t(f.begin(), f.begin() + m);
         g = ntt(t, g, [ = ](const int &x, const int &y) {
             return (2 * y - 1LL * y * y % MOD * x % MOD + MOD) % MOD;
         });
@@ -311,8 +311,8 @@ int cipolla(int n) {
     }, (MOD + 1) / 2);
     return res.real;
 }
-Poly sqrt(const Poly &F) {
-    Poly f = F;
+poly sqrt(const poly &F) {
+    poly f = F;
     int m = f.size() - 1;
     int n = 1;
 
@@ -321,11 +321,11 @@ Poly sqrt(const Poly &F) {
 
     f.resize(n);
     int g0 = cipolla(f[0]);
-    Poly g = {std::min(g0, MOD - g0)};
+    poly g = {std::min(g0, MOD - g0)};
     int inv2 = getinv(2);
 
     for (int m = 2; m <= n; m <<= 1) {
-        Poly t(f.begin(), f.begin() + m);
+        poly t(f.begin(), f.begin() + m);
         g.resize(m);
         g = g * inv2 + ntt(t, getinv(g), [ = ](const int &x, const int &y) {
             return 1LL * inv2 * x % MOD * y % MOD;
@@ -336,63 +336,63 @@ Poly sqrt(const Poly &F) {
     g.resize(m + 1);
     return g;
 }
-Poly operator/(const Poly &F, const Poly &G) {
-    Poly f = F, g = G;
+poly operator/(const poly &F, const poly &G) {
+    poly f = F, g = G;
     int n = f.size() - 1, m = g.size() - 1;
 
     if (n < m)
-        return Poly(n - m + 1);
+        return poly(n - m + 1);
 
     reverse(f.begin(), f.end());
     reverse(g.begin(), g.end());
     f.resize(n - m + 1);
     g.resize(n - m + 1);
-    Poly q = f * getinv(g);
+    poly q = f * getinv(g);
     q.resize(n - m + 1);
     reverse(q.begin(), q.end());
     return q;
 }
-Poly operator%(const Poly &F, const Poly &G) {
-    Poly f = F, g = G, q = f / g;
+poly operator%(const poly &F, const poly &G) {
+    poly f = F, g = G, q = f / g;
     int m = g.size() - 1;
     g.resize(m);
     q.resize(m);
-    Poly c = g * q;
+    poly c = g * q;
     c.resize(m);
     f.resize(m);
     return f - c;
 }
-Poly diff_calc(const Poly &F) {
-    Poly f = F;
+poly diff_calc(const poly &F) {
+    poly f = F;
     int n = f.size() - 1;
-    Poly g(n);
+    poly g(n);
 
     for (int i = 1; i <= n; i++)
         g[i - 1] = 1LL * f[i] * i % MOD;
 
     return g;
 }
-Poly inte_calc(const Poly &G) {
-    Poly g = G;
+poly inte_calc(const poly &G) {
+    poly g = G;
     int n = g.size() - 1;
-    Poly f(n + 2);
+    poly f(n + 2);
 
     for (int i = 1; i <= n + 1; i++)
         f[i] = 1LL * g[i - 1] * inv[i] % MOD;
 
     return f;
 }
-Poly ln(const Poly &F) {
-    Poly f = F;
+poly ln(const poly &F) {
+    poly f = F;
     int n = f.size() - 1;
-    Poly g = diff_calc(f) * getinv(f);
+    poly g = diff_calc(f) * getinv(f);
     g.resize(n + 1);
     g = inte_calc(g);
     g.resize(n + 1);
     return g;
 }
-Poly exp(const Poly &F) {
-    Poly f = F;
+poly exp(const poly &F) {
+    poly f = F;
     int m = f.size() - 1;
     int n = 1;
 
@@ -400,13 +400,13 @@ Poly exp(const Poly &F) {
         n <<= 1;
 
     f.resize(n);
-    Poly g = {1};
+    poly g = {1};
 
     for (int m = 2; m <= n; m <<= 1) {
-        Poly t(f.begin(), f.begin() + m);
-        Poly s = g;
+        poly t(f.begin(), f.begin() + m);
+        poly s = g;
         g.resize(m);
-        g = s * (t - ln(g) + (Poly) {
+        g = s * (t - ln(g) + (poly) {
             1
         });
         g.resize(m);
@@ -415,10 +415,10 @@ Poly exp(const Poly &F) {
     g.resize(m + 1);
     return g;
 }
-Poly pow(const Poly &F, const int &k) {
-    Poly f = F;
+poly pow(const poly &F, const int &k) {
+    poly f = F;
     int n = f.size() - 1;
-    Poly g(n + 1);
+    poly g(n + 1);
     int pos = -1;
 
     for (int i = 0; i <= n; i++)
@@ -454,8 +454,8 @@ Poly pow(const Poly &F, const int &k) {
 
     return g;
 }
-int poly_calc(const Poly &F, const int &x) {
-    Poly f = F;
+int poly_calc(const poly &F, const int &x) {
+    poly f = F;
     int n = f.size() - 1;
     int fc = 1, res = 0;
 
@@ -464,13 +464,13 @@ int poly_calc(const Poly &F, const int &x) {
 
     return res;
 }
-Poly poly_eval(const Poly &F, const Poly &a) {
-    Poly f = F;
+poly poly_eval(const poly &F, const poly &a) {
+    poly f = F;
     int m = a.size();
-    std::vector<Poly>g(m << 2);
+    std::vector<poly>g(m << 2);
     std::function<void(int, int, int)> init_poly_eval = [&](int i, int l, int r) {
         if (l == r) {
-            g[i] = (Poly) {
+            g[i] = (poly) {
                 MOD - a[l], 1
             };
             return;
@@ -483,8 +483,8 @@ Poly poly_eval(const Poly &F, const Poly &a) {
         return;
     };
     init_poly_eval(1, 0, m - 1);
-    Poly res(m);
-    std::function<void(int, int, int, const Poly &)> solve_poly_eval = [&](int i, int l, int r, const Poly & f) {
+    poly res(m);
+    std::function<void(int, int, int, const poly &)> solve_poly_eval = [&](int i, int l, int r, const poly & f) {
         if (l == r) {
             res[l] = f[0];
             return;
@@ -501,12 +501,12 @@ Poly poly_eval(const Poly &F, const Poly &a) {
 struct Point {
     int x, y;
 };
-Poly poly_inte(const std::vector<Point> &p) {
+poly poly_inte(const std::vector<Point> &p) {
     int n = p.size() - 1;
-    std::vector<Poly>g(n << 2);
+    std::vector<poly>g(n << 2);
     std::function<void(int, int, int)> init_poly_eval = [&](int i, int l, int r) {
         if (l == r) {
-            g[i] = (Poly) {
+            g[i] = (poly) {
                 MOD - p[l].x, 1
             };
             return;
@@ -519,18 +519,18 @@ Poly poly_inte(const std::vector<Point> &p) {
         return;
     };
     init_poly_eval(1, 0, n);
-    Poly x(n + 1);
+    poly x(n + 1);
 
     for (int i = 0; i <= n; i++)
         x[i] = p[i].x;
 
-    Poly F = poly_eval(diff_calc(g[1]), x);
+    poly F = poly_eval(diff_calc(g[1]), x);
     std::vector<int> a(n + 1);
 
     for (int i = 0; i <= n; i++)
         a[i] = 1LL * p[i].y * getinv(F[i]) % MOD;
 
-    std::vector<Poly>res(n << 2);
+    std::vector<poly>res(n << 2);
     std::function<void(int, int, int)> solve_poly_inte = [&](int i, int l, int r) {
         if (l == r) {
             res[i] = {a[l]};
@@ -546,15 +546,15 @@ Poly poly_inte(const std::vector<Point> &p) {
     solve_poly_inte(1, 0, n);
     return res[1];
 }
-Poly operator|(const Poly &F, const Poly &G) {
-    Poly f = F, g = G;
+poly operator|(const poly &F, const poly &G) {
+    poly f = F, g = G;
     int m = std::max(f.size() - 1, g.size() - 1), n = 1;
 
     while (n <= m)
         n <<= 1;
 
     f.resize(n), g.resize(n);
-    std::function<void(Poly &)> fwt = [ = ](Poly & F) {
+    std::function<void(poly &)> fwt = [ = ](poly & F) {
         int n = F.size();
 
         for (int len = 2; len <= n; len <<= 1)
@@ -570,7 +570,7 @@ Poly operator|(const Poly &F, const Poly &G) {
     for (int i = 0; i < n; i++)
         f[i] = 1LL * f[i] * g[i] % MOD;
 
-    std::function<void(Poly &)> ifwt = [ = ](Poly & F) {
+    std::function<void(poly &)> ifwt = [ = ](poly & F) {
         int n = F.size();
 
         for (int len = 2; len <= n; len <<= 1)
@@ -583,15 +583,15 @@ Poly operator|(const Poly &F, const Poly &G) {
     ifwt(f);
     return f;
 }
-Poly operator&(const Poly &F, const Poly &G) {
-    Poly f = F, g = G;
+poly operator&(const poly &F, const poly &G) {
+    poly f = F, g = G;
     int m = std::max(f.size() - 1, g.size() - 1), n = 1;
 
     while (n <= m)
         n <<= 1;
 
     f.resize(n), g.resize(n);
-    std::function<void(Poly &)> fwt = [ = ](Poly & F) {
+    std::function<void(poly &)> fwt = [ = ](poly & F) {
         int n = F.size();
 
         for (int len = 2; len <= n; len <<= 1)
@@ -607,7 +607,7 @@ Poly operator&(const Poly &F, const Poly &G) {
     for (int i = 0; i < n; i++)
         f[i] = 1LL * f[i] * g[i] % MOD;
 
-    std::function<void(Poly &)> ifwt = [ = ](Poly & F) {
+    std::function<void(poly &)> ifwt = [ = ](poly & F) {
         int n = F.size();
 
         for (int len = 2; len <= n; len <<= 1)
@@ -620,15 +620,15 @@ Poly operator&(const Poly &F, const Poly &G) {
     ifwt(f);
     return f;
 }
-Poly operator^(const Poly &F, const Poly &G) {
-    Poly f = F, g = G;
+poly operator^(const poly &F, const poly &G) {
+    poly f = F, g = G;
     int m = std::max(f.size() - 1, g.size() - 1), n = 1;
 
     while (n <= m)
         n <<= 1;
 
     f.resize(n), g.resize(n);
-    std::function<void(Poly &)> fwt = [ = ](Poly & F) {
+    std::function<void(poly &)> fwt = [ = ](poly & F) {
         int n = F.size();
 
         for (int len = 2; len <= n; len <<= 1)
@@ -647,7 +647,7 @@ Poly operator^(const Poly &F, const Poly &G) {
     for (int i = 0; i < n; i++)
         f[i] = 1LL * f[i] * g[i] % MOD;
 
-    std::function<void(Poly &)> ifwt = [ = ](Poly & F) {
+    std::function<void(poly &)> ifwt = [ = ](poly & F) {
         int n = F.size();
 
         for (int len = 2; len <= n; len <<= 1)
@@ -670,7 +670,7 @@ Poly operator^(const Poly &F, const Poly &G) {
 }
 }
 using poly_define::init;
-using poly_define::Poly;
+using poly_define::poly;
 using poly_define::operator+;
 using poly_define::operator-;
 using poly_define::operator*;
