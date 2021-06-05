@@ -66,20 +66,6 @@ public:
         c.v = 1LL * v * rhs.v % MOD;
         return c;
     }
-    friend modint pow(const modint &aa, const int &bb) {
-        modint a = aa;
-        int b = bb;
-        modint res = 1;
-
-        while (b) {
-            if (b & 1)
-                res = res * a;
-
-            a = a * a, b >>= 1;
-        }
-
-        return res;
-    }
     modint getinv()const {
         int x, y;
         int d = ex_gcd(v, MOD, x, y);
@@ -137,7 +123,22 @@ public:
         return c;
     }
 };
+modint pow(const modint &aa, const long long &bb) {
+    modint a = aa;
+    int b = bb;
+    modint res = 1;
+
+    while (b) {
+        if (b & 1)
+            res = res * a;
+
+        a = a * a, b >>= 1;
+    }
+
+    return res;
+}
 }
 using mod_int_define::set_mod;
 using mod_int_define::mod;
 using mod_int_define::modint;
+using mod_int_define::pow;
