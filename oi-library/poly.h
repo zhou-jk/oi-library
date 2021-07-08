@@ -45,7 +45,7 @@ void init_inv(int n) {
 
     return;
 }
-void init(int _n) {
+void init_poly(int _n) {
     n = _n;
     W[0].resize(n * 8 + 1);
     W[1].resize(n * 8 + 1);
@@ -669,7 +669,7 @@ poly operator^(const poly &F, const poly &G) {
     return f;
 }
 }
-using poly_define::init;
+using poly_define::init_poly;
 using poly_define::poly;
 using poly_define::operator+;
 using poly_define::operator-;
