@@ -46,12 +46,13 @@ void init_inv(int n) {
     return;
 }
 void init_poly(int _n) {
-    n = _n;
-    W[0].resize(n * 8 + 1);
-    W[1].resize(n * 8 + 1);
-    init_omega(n * 4);
-    inv.resize(n * 4 + 1);
-    init_inv(n * 4);
+    n = 1;
+    while (n <= _n) n <<= 1;
+    W[0].resize(n * 4 + 1);
+    W[1].resize(n * 4 + 1);
+    init_omega(n * 2);
+    inv.resize(n * 2 + 1);
+    init_inv(n * 2);
     return;
 }
 typedef std::vector<int> poly;
