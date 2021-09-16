@@ -43,6 +43,9 @@ public:
     int val()const {
         return v;
     }
+    operator int() {
+        return v;
+    }
     modint operator + (const modint &rhs)const {
         modint c;
         c.v = (v + rhs.v);
